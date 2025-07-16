@@ -5,45 +5,197 @@
     <title>Environment Indicator Settings</title>
     <style>
       body {
-        font-family: sans-serif;
-        margin: 32px;
+        font-family: "Segoe UI", Arial, sans-serif;
+        margin: 0;
+        background: #f7fafc;
+        color: #222;
+      }
+      .container {
+        max-width: 600px;
+        margin: 40px auto;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+        padding: 32px 28px 24px 28px;
+      }
+      h2,
+      h3 {
+        margin-top: 0;
+        font-weight: 700;
+        letter-spacing: 0.5px;
       }
       label {
         display: block;
-        margin-top: 12px;
+        margin-top: 18px;
+        font-weight: 500;
       }
       input[type="text"],
-      input[type="color"] {
-        margin-top: 4px;
-        width: 300px;
+      input[type="color"],
+      select {
+        margin-top: 6px;
+        width: 100%;
+        padding: 8px 10px;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        font-size: 15px;
+        background: #f9fafb;
+        box-sizing: border-box;
       }
       .rule {
-        border: 1px solid #ccc;
-        padding: 12px;
-        margin-bottom: 12px;
-        border-radius: 6px;
+        border: 1px solid #e5e7eb;
+        background: #f3f4f6;
+        padding: 14px 16px;
+        margin-bottom: 16px;
+        border-radius: 8px;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
       }
-      button {
+      .rule-info {
+        flex: 1;
+      }
+      .rule-actions {
+        margin-left: 16px;
+      }
+      .rule-emoji {
+        font-size: 20px;
+        margin-right: 6px;
+      }
+      .rule-color {
+        display: inline-block;
+        width: 18px;
+        height: 18px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        vertical-align: middle;
+        margin-left: 4px;
+        margin-right: 2px;
+      }
+      button,
+      .deleteBtn {
         margin-top: 8px;
+        background: #ef4444;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        padding: 7px 16px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      button[type="submit"] {
+        background: #10b981;
+        margin-top: 18px;
+      }
+      button:hover,
+      .deleteBtn:hover {
+        background: #b91c1c;
+      }
+      .help {
+        font-size: 12px;
+        color: #6b7280;
+        margin-top: 2px;
+        margin-bottom: 0;
+      }
+      .section {
+        margin-bottom: 32px;
+      }
+      .global-options {
+        background: #f1f5f9;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 14px 16px;
+        margin-bottom: 24px;
+      }
+      .global-options label {
+        margin-top: 0;
       }
     </style>
   </head>
   <body>
-    <h2>Environment Rules</h2>
-    <div id="rules"></div>
-    <h3>Add New Rule</h3>
-    <form id="addRuleForm">
-      <label
-        >Pattern (string or regex): <input type="text" id="pattern" required
-      /></label>
-      <label>Name: <input type="text" id="name" required /></label>
-      <label>Color: <input type="color" id="color" value="#10b981" /></label>
-      <label
-        >Emoji:
-        <input type="text" id="emoji" maxlength="2" placeholder="e.g. 🚀"
-      /></label>
-      <button type="submit">Add Rule</button>
-    </form>
+    <div class="container">
+      <h2>Environment Indicator Settings</h2>
+      <div class="section global-options">
+        <h3>Global Style Options</h3>
+        <label
+          >Font Size:
+          <input
+            type="number"
+            id="globalFontSize"
+            min="10"
+            max="32"
+            value="15"
+          />
+          px
+        </label>
+        <label
+          >Border Radius:
+          <input
+            type="number"
+            id="globalBorderRadius"
+            min="0"
+            max="32"
+            value="8"
+          />
+          px
+        </label>
+        <p class="help">
+          These options will apply to all indicators (future use).
+        </p>
+      </div>
+      <div class="section">
+        <h3>Environment Rules</h3>
+        <div id="rules"></div>
+      </div>
+      <div class="section">
+        <h3>Add New Rule</h3>
+        <form id="addRuleForm">
+          <label
+            >Pattern (string or regex):
+            <input type="text" id="pattern" required />
+            <span class="help">e.g. dev.example.com or ^https://staging\.</span>
+          </label>
+          <label
+            >Name:
+            <input type="text" id="name" required />
+            <span class="help">e.g. Development, Staging, Production</span>
+          </label>
+          <label
+            >Color:
+            <input type="color" id="color" value="#10b981" />
+            <span class="help">Background color for the indicator</span>
+          </label>
+          <label
+            >Emoji:
+            <input type="text" id="emoji" maxlength="2" placeholder="e.g. 🚀" />
+            <span class="help">Optional. Emoji to show in the indicator</span>
+          </label>
+          <label
+            >Size:
+            <select id="size">
+              <option value="strip">Strip (full bar)</option>
+              <option value="badge">Badge (small pill)</option>
+            </select>
+            <span class="help">Choose the indicator style</span>
+          </label>
+          <label
+            >Position:
+            <select id="position">
+              <option value="bottom">Bottom (full width)</option>
+              <option value="top">Top (full width)</option>
+              <option value="bottom-right">Bottom Right</option>
+              <option value="bottom-left">Bottom Left</option>
+              <option value="top-right">Top Right</option>
+              <option value="top-left">Top Left</option>
+            </select>
+            <span class="help">Where the indicator appears on the page</span>
+          </label>
+          <button type="submit">Add Rule</button>
+        </form>
+      </div>
+    </div>
     <script src="options.js"></script>
   </body>
 </html>
