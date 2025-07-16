@@ -5,14 +5,8 @@ chrome.storage.sync.get(
     const rules = result.envRules || [];
     const url = window.location.href;
     const matched = rules.find((rule) => {
-      try {
-        // Try regex match first
-        const regex = new RegExp(rule.pattern);
-        return regex.test(url);
-      } catch (e) {
-        // Fallback to substring match
-        return url.includes(rule.pattern);
-      }
+      // Use substring match only for smoother experience
+      return url.includes(rule.pattern);
     });
     if (matched) {
       showEnvIndicator(
