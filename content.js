@@ -248,6 +248,46 @@ function showEnvIndicator(env, globalFontSize, globalBorderRadius) {
     }
   });
 
+  // Make badge draggable only in badge mode
+  if (size === "badge") {
+    let isDragging = false;
+    let dragOffsetX = 0;
+    let dragOffsetY = 0;
+
+    // Use mousedown on the container to start drag
+    indicatorContainer.addEventListener("mousedown", function (e) {
+      // Only allow left mouse button and not on the toggle button
+      if (e.button !== 0 || e.target === toggleButton) return;
+      isDragging = true;
+      // Switch to absolute positioning for free movement
+      indicatorContainer.style.left = indicatorContainer.offsetLeft + "px";
+      indicatorContainer.style.top = indicatorContainer.offsetTop + "px";
+      indicatorContainer.style.right = "auto";
+      indicatorContainer.style.bottom = "auto";
+      indicatorContainer.style.position = "fixed";
+      dragOffsetX = e.clientX - indicatorContainer.offsetLeft;
+      dragOffsetY = e.clientY - indicatorContainer.offsetTop;
+      // Prevent text selection while dragging
+      document.body.style.userSelect = "none";
+    });
+
+    // Move badge with mouse
+    document.addEventListener("mousemove", function (e) {
+      if (!isDragging) return;
+      // Update position based on mouse movement
+      indicatorContainer.style.left = (e.clientX - dragOffsetX) + "px";
+      indicatorContainer.style.top = (e.clientY - dragOffsetY) + "px";
+    });
+
+    // Stop dragging on mouseup
+    document.addEventListener("mouseup", function () {
+      if (isDragging) {
+        isDragging = false;
+        document.body.style.userSelect = "";
+      }
+    });
+  }
+
   // Add to page with smooth entrance
   document.body.appendChild(indicatorContainer);
   requestAnimationFrame(() => {
